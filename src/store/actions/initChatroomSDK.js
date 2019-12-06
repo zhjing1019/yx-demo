@@ -8,7 +8,9 @@ import config from '@/configs'
 // import store from '../'
 import {onChatroomMsgs} from './chatroomMsgs'
 
+// const SDK = require('@/sdk/' + config.sdk)
 const SDK = require('@/sdk/' + config.sdk)
+
 
 // 切换聊天室之前需要断开连接，消息并发较大时会有性能问题
 // 重新初始化 NIM SDK

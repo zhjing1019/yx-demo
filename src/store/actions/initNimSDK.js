@@ -15,6 +15,7 @@ import {onRoamingMsgs, onOfflineMsgs, onMsg} from './msgs'
 import {onSysMsgs, onSysMsg, onSysMsgUnread, onCustomSysMsgs} from './sysMsgs'
 import { onTeams, onSynCreateTeam, onCreateTeam, onUpdateTeam, onTeamMembers, onUpdateTeamMember, onAddTeamMembers, onRemoveTeamMembers, onUpdateTeamManagers, onDismissTeam, onUpdateTeamMembersMute, onTeamMsgReceipt} from './team'
 
+// const SDK = require('@/sdk/' + config.sdk)
 const SDK = require('@/sdk/' + config.sdk)
 
 
