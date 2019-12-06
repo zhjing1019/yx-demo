@@ -1,11 +1,9 @@
 // 更改 Vuex 的 store 中的状态的唯一方法是提交 mutation
 // this.$store.commit(method, params)
 
-import store from '../'
 import cookie from '../../utils/cookie'
 import util from '../../utils'
 import config from '../../configs'
-import Vue from 'Vue'
 
 export default {
   updateRefreshState (state) {
@@ -138,7 +136,7 @@ export default {
       state.msgs[sessionId] = nim.mergeMsgs(state.msgs[sessionId], [msg])
       // state.msgs[sessionId].push(msg)
     })
-    store.commit('updateMsgByIdClient', msgs)
+    this.$store.commit('updateMsgByIdClient', msgs)
     for (let sessionId in tempSessionMap) {
       state.msgs[sessionId].sort((a, b) => {
         if (a.time === b.time) {
@@ -155,7 +153,7 @@ export default {
         return a.time - b.time
       })
       if (sessionId === state.currSessionId) {
-        store.commit('updateCurrSessionMsgs', {
+        this.$store.commit('updateCurrSessionMsgs', {
           type: 'init'
         })
       }
@@ -167,7 +165,7 @@ export default {
     if (!state.msgs[sessionId]) {
       state.msgs[sessionId] = []
     }
-    store.commit('updateMsgByIdClient', msg)
+    this.$store.commit('updateMsgByIdClient', msg)
     let tempMsgs = state.msgs[sessionId]
     let lastMsgIndex = tempMsgs.length - 1
     if (tempMsgs.length === 0 || msg.time >= tempMsgs[lastMsgIndex].time) {
@@ -246,7 +244,7 @@ export default {
     if (type === 'destroy') { // 清空会话消息
       state.currSessionMsgs = []
       state.currSessionLastMsg = null
-      store.commit('updateCurrSessionId', {
+      this.$store.commit('updateCurrSessionId', {
         type: 'destroy'
       })
     } else if (type === 'init') { // 初始化会话消息列表
@@ -276,7 +274,7 @@ export default {
           }
           state.currSessionMsgs.push(msg)
         })
-        store.dispatch('checkTeamMsgReceipt', state.currSessionMsgs)
+        this.$store.dispatch('checkTeamMsgReceipt', state.currSessionMsgs)
       }
     } else if (type === 'put') { // 追加一条消息
       let newMsg = obj.msg
@@ -293,7 +291,7 @@ export default {
           })
         }
         state.currSessionMsgs.push(newMsg)
-        store.dispatch('checkTeamMsgReceipt', [newMsg])
+        this.$store.dispatch('checkTeamMsgReceipt', [newMsg])
       }
     } else if (type === 'concat') {
       // 一般用于历史消息拼接
@@ -316,7 +314,7 @@ export default {
       if (obj.msgs[0]) {
         state.currSessionLastMsg = obj.msgs[0]
       }
-      store.dispatch('checkTeamMsgReceipt', currSessionMsgs)
+      this.$store.dispatch('checkTeamMsgReceipt', currSessionMsgs)
     } else if (type === 'replace') {
       let msgLen = state.currSessionMsgs.length
       let lastMsgIndex = msgLen - 1
@@ -341,7 +339,7 @@ export default {
     })
     // state.sysMsgs = nim.mergeSysMsgs(state.sysMsgs, sysMsgs)
     state.sysMsgs = [].concat(nim.mergeSysMsgs(state.sysMsgs, sysMsgs))
-    Vue.set(state, sysMsgs, state.sysMsgs)
+    this.$set(state, sysMsgs, state.sysMsgs)
   },
   // 更新消息的状态，如管理员批准或拒绝入群后，会收到新消息，更新入群申请的状态
   updateSysMsgState (state, sysMsg) {
@@ -367,7 +365,7 @@ export default {
     // state.customSysMsgs = nim.mergeSysMsgs(state.customSysMsgs, sysMsgs)
     state.customSysMsgs = state.customSysMsgs.concat(sysMsgs)
     Vue.set(state, sysMsgs, state.customSysMsgs)
-    store.commit('updateCustomSysMsgUnread', {
+    this.$store.commit('updateCustomSysMsgUnread', {
       type: 'add',
       unread: sysMsgs.length
     })
@@ -391,7 +389,7 @@ export default {
         break
       case 1:
         state.customSysMsgs = []
-        store.commit('updateCustomSysMsgUnread', {
+        this.$store.commit('updateCustomSysMsgUnread', {
           type: 'reset'
         })
         break
@@ -478,8 +476,8 @@ export default {
   },
   updateTeamList (state, teams) {
     const nim = state.nim
-    store.state.teamlist = nim.mergeTeams(store.state.teamlist, teams)
-    store.state.teamlist = nim.cutTeams(store.state.teamlist, teams.invalid)
+    this.$store.state.teamlist = nim.mergeTeams(this.$store.state.teamlist, teams)
+    this.$store.state.teamlist = nim.cutTeams(this.$store.state.teamlist, teams.invalid)
   },
   updateTeamMembers (state, obj) {
     const nim = state.nim
@@ -551,7 +549,7 @@ export default {
       state.receiptQueryList.push(...needQuery)
     }
     if (needQuery.length > 0) {
-      store.dispatch('getTeamMsgReads', needQuery)
+        this.$store.dispatch('getTeamMsgReads', needQuery)
     }
   },
   updateTeamMsgReads(state, obj) {

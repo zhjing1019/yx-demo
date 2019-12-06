@@ -44,10 +44,8 @@ import cookie from './../utils/cookie'
             // 服务端帐号均为小写
             cookie.setCookie('uid', this.ruleForm.account.toLowerCase());
             cookie.setCookie('sdktoken', sdktoken);
-            // location.href = config.homeUrl
             this.$router.push('Home');
           } else {
-            // console.log('error submit!!');
             return false;
           }
         });

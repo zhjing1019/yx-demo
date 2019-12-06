@@ -1,5 +1,5 @@
-import store from '../'
-import config from '../../configs'
+// import store from '../'
+// import config from '../../configs'
 
 // 用于demo记录封面
 export function initChatroomInfos ({state, commit}, obj) {
@@ -44,7 +44,7 @@ export function getChatroomMembers ({state, commit, dispatch}) {
 }
 
 function getChatroomMembersLocal (isGuest, callback) {
-  const chatroom = store.state.currChatroom
+  const chatroom = this.$store.state.currChatroom
   if (chatroom) {
     chatroom.getChatroomMembers({
       guest: isGuest,

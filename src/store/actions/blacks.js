@@ -2,7 +2,7 @@
  * 黑名单及静音列表
  */
 
-import store from '../'
+// import store from '../'
 
 // 完成添加/删除黑名单，初始化获取黑名单列表，都会触发此函数
 export function onBlacklist (blacks) {
@@ -13,19 +13,19 @@ export function onBlacklist (blacks) {
     return item
   })
   // 更新黑名单列表
-  store.commit('updateBlacklist', blacks)
+  this.$store.commit('updateBlacklist', blacks)
   // 在好友身上打上标记
-  store.commit('updateFriends', blacks)
+  this.$store.commit('updateFriends', blacks)
   // 更新好友信息字典
-  store.commit('updateUserInfo', blacks)
+  this.$store.commit('updateUserInfo', blacks)
 }
 
-export function onMarkInBlacklist (obj) {
+export function onMarkInBlacklist (obj,obj2) {
   obj = obj || obj2
   let account = obj.account
   // 说明是自己，被别人加入黑名单
-  if (account === store.state.userUID) {
-
+  if (account === this.$store.state.userUID) {
+    console.log(account)
   } else {
     // 说明是别人的帐号，黑名单通知
     if (typeof obj.isAdd === 'boolean') {

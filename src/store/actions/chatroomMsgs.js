@@ -1,6 +1,6 @@
-import store from '../'
+// import store from '../'
 import config from '../../configs'
-import util from '../../utils'
+// import util from '../../utils'
 import {formatMsg} from './msgs'
 
 export function onChatroomMsgs (msgs) {
@@ -10,8 +10,8 @@ export function onChatroomMsgs (msgs) {
   msgs = msgs.map(msg => {
     return formatMsg(msg)
   })
-  if (store.state.currChatroomId) {
-    store.commit('updateCurrChatroomMsgs', {
+  if (this.$store.state.currChatroomId) {
+    this.$store.commit('updateCurrChatroomMsgs', {
       type: 'put',
       msgs
     })
@@ -19,7 +19,7 @@ export function onChatroomMsgs (msgs) {
 }
 
 function onSendMsgDone (error, msg) {
-  store.dispatch('hideLoading')
+  this.$store.dispatch('hideLoading')
   if (error) {
     alert(error.message)
     return
@@ -31,7 +31,7 @@ export function sendChatroomMsg ({state, commit}, obj) {
   const chatroom = state.currChatroom
   obj = obj || {}
   let type = obj.type || ''
-  store.dispatch('showLoading')
+  this.$store.dispatch('showLoading')
   switch (type) {
     case 'text':
       chatroom.sendText({
@@ -93,7 +93,7 @@ export function sendChatroomFileMsg ({state, commit}, obj) {
   } else if (/\.(mov|mp4|ogg|webm)$/i.test(fileInput.value)) {
     type = 'video'
   }
-  store.dispatch('showLoading')
+  this.$store.dispatch('showLoading')
   chatroom.sendFile({
     type,
     fileInput,
@@ -102,7 +102,7 @@ export function sendChatroomFileMsg ({state, commit}, obj) {
     },
     uploaderror: function () {
       fileInput.value = ''
-      console && console.log('上传失败')
+      console.log('上传失败')
     },
     uploaddone: function(error, file) {
       fileInput.value = ''
@@ -140,10 +140,10 @@ export function getChatroomHistoryMsgs ({state, commit}, obj) {
             })
           }
         }
-        store.dispatch('hideLoading')
+        this.$store.dispatch('hideLoading')
       }
     }
-    store.dispatch('showLoading')
+    this.$store.dispatch('showLoading')
     nim.getHistoryMsgs(options)
   }
 }

@@ -1,9 +1,9 @@
-import store from '../'
+// import store from '../'
 import config from '../../configs'
 import util from '../../utils'
 
 export function formatMsg (msg) {
-  const nim = store.state.nim
+  const nim = this.$store.state.nim
   if (msg.type === 'robot') {
     if (msg.content && msg.content.flag === 'bot') {
       if (msg.content.message) {
@@ -29,34 +29,34 @@ export function onRoamingMsgs (obj) {
   let msgs = obj.msgs.map(msg => {
     return formatMsg(msg)
   })
-  store.commit('updateMsgs', msgs)
+  this.$store.commit('updateMsgs', msgs)
 }
 
 export function onOfflineMsgs (obj) {
   let msgs = obj.msgs.map(msg => {
     return formatMsg(msg)
   })
-  store.commit('updateMsgs', msgs)
+  this.$store.commit('updateMsgs', msgs)
 }
 
 export function onMsg (msg) {
   msg = formatMsg(msg)
-  store.commit('putMsg', msg)
-  if (msg.sessionId === store.state.currSessionId) {
-    store.commit('updateCurrSessionMsgs', {
+  this.$store.commit('putMsg', msg)
+  if (msg.sessionId === this.$store.state.currSessionId) {
+    this.$store.commit('updateCurrSessionMsgs', {
       type: 'put',
       msg
     })
     // 发送已读回执
-    store.dispatch('sendMsgReceipt')
+    this.$store.dispatch('sendMsgReceipt')
   }
   if (msg.scene === 'team' && msg.type ==='notification') {
-    store.dispatch('onTeamNotificationMsg', msg)
+    this.$store.dispatch('onTeamNotificationMsg', msg)
   }
 }
 
 function onSendMsgDone (error, msg) {
-  store.dispatch('hideLoading')
+  this.$store.dispatch('hideLoading')
   if (error) {
     // 被拉黑
     if (error.code === 7101) {
@@ -71,7 +71,7 @@ function onSendMsgDone (error, msg) {
 
 // 消息撤回
 export function onRevocateMsg (error, msg) {
-  const nim = store.state.nim
+  const nim = this.$store.state.nim
   if (error) {
     if (error.code === 508) {
       alert('发送时间超过2分钟的消息，不能被撤回')
@@ -81,10 +81,10 @@ export function onRevocateMsg (error, msg) {
     return
   }
   let tip = ''
-  if (msg.from === store.state.userUID) {
+  if (msg.from === this.$store.state.userUID) {
     tip = '你撤回了一条消息'
   } else {
-    let userInfo = store.state.userInfos[msg.from]
+    let userInfo = this.$store.state.userInfos[msg.from]
     if (userInfo) {
       tip = `${util.getFriendAlias(userInfo)}撤回了一条消息`
     } else {
@@ -99,13 +99,13 @@ export function onRevocateMsg (error, msg) {
     time: msg.time,
     done: function sendTipMsgDone (error, tipMsg) {
       let idClient = msg.deletedIdClient || msg.idClient
-      store.commit('replaceMsg', {
+      this.$store.commit('replaceMsg', {
         sessionId: msg.sessionId,
         idClient,
         msg: tipMsg
       })
-      if (msg.sessionId === store.state.currSessionId) {
-        store.commit('updateCurrSessionMsgs', {
+      if (msg.sessionId === this.$store.state.currSessionId) {
+        this.$store.commit('updateCurrSessionMsgs', {
           type: 'replace',
           idClient,
           msg: tipMsg
@@ -128,7 +128,7 @@ export function revocateMsg ({state, commit}, msg) {
   })
 }
 export function updateLocalMsg ({state, commit}, msg) {
-  store.commit('updateCurrSessionMsgs', {
+  this.$store.commit('updateCurrSessionMsgs', {
     type: 'replace',
     idClient: msg.idClient,
     msg: msg
@@ -137,7 +137,7 @@ export function updateLocalMsg ({state, commit}, msg) {
     idClient: msg.idClient,
     localCustom: msg.localCustom
   })
-  store.commit('replaceMsg', {
+  this.$store.commit('replaceMsg', {
     sessionId: msg.sessionId,
     idClient: msg.idClient,
     msg: msg
@@ -149,7 +149,7 @@ export function sendMsg ({state, commit}, obj) {
   const nim = state.nim
   obj = obj || {}
   let type = obj.type || ''
-  store.dispatch('showLoading')
+  this.$store.dispatch('showLoading')
   switch (type) {
     case 'text':
       nim.sendText({
@@ -183,7 +183,7 @@ export function sendFileMsg ({state, commit}, obj) {
       type = 'video'
     }
   }
-  store.dispatch('showLoading')
+  this.$store.dispatch('showLoading')
   const data = Object.assign({
     type,
     uploadprogress: function (data) {
@@ -191,7 +191,7 @@ export function sendFileMsg ({state, commit}, obj) {
     },
     uploaderror: function () {
       fileInput.value = ''
-      console && console.log('上传失败')
+      console.log('上传失败')
     },
     uploaddone: function(error, file) {
       fileInput.value = ''
@@ -255,11 +255,11 @@ export function sendRobotMsg ({state, commit}, obj) {
 // 发送消息已读回执
 export function sendMsgReceipt ({state, commit}) {
   // 如果有当前会话
-  let currSessionId = store.state.currSessionId
+  let currSessionId = this.$store.state.currSessionId
   if (currSessionId) {
     // 只有点对点消息才发已读回执
     if (util.parseSession(currSessionId).scene === 'p2p') {
-      let msgs = store.state.currSessionMsgs
+      let msgs = this.$store.state.currSessionMsgs
       const nim = state.nim
       if (state.sessionMap[currSessionId]) {
         nim.sendMsgReceipt({
@@ -301,7 +301,7 @@ export function getHistoryMsgs ({state, commit}, obj) {
             })
           }
         }
-        store.dispatch('hideLoading')
+        this.$store.dispatch('hideLoading')
       }
     }
     if (state.currSessionLastMsg) {
@@ -310,7 +310,7 @@ export function getHistoryMsgs ({state, commit}, obj) {
         endTime: state.currSessionLastMsg.time,
       })
     }
-    store.dispatch('showLoading')
+    this.$store.dispatch('showLoading')
     nim.getHistoryMsgs(options)
   }
 }

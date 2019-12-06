@@ -2,12 +2,12 @@
  * 用户账号信息
  */
 
-import store from '../'
+// import store from '../'
 import config from '../../configs'
 import util from '../../utils'
 
 export function formatUserInfo (obj) {
-  const nim = store.state.nim
+  const nim = this.$store.state.nim
   let gender = ''
   switch (obj.gender) {
     case 'male':
@@ -62,9 +62,9 @@ export function formatUserInfo (obj) {
 }
 
 export function onMyInfo (obj) {
-  obj = util.mergeObject(store.state.myInfo, obj);
+  obj = util.mergeObject(this.$store.state.myInfo, obj);
   let myInfo = formatUserInfo(obj)
-  store.commit('updateMyInfo', myInfo)
+  this.$store.commit('updateMyInfo', myInfo)
 }
 
 export function onUserInfo (users) {
@@ -72,5 +72,5 @@ export function onUserInfo (users) {
     users = [users]
   }
   users = users.map(formatUserInfo)
-  store.commit('updateUserInfo', users)
+  this.$store.commit('updateUserInfo', users)
 }

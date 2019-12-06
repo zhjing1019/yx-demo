@@ -2,7 +2,7 @@
  * 用户关系及好友关系托管
  */
 
-import store from '../'
+// import store from '../'
 import { formatUserInfo } from './userInfo' 
 
 // 好友关系，回调
@@ -13,9 +13,9 @@ export function onFriends (friends) {
     }
     return item
   })
-  store.commit('updateFriends', friends)
+  this.$store.commit('updateFriends', friends)
   // 更新好友信息字典，诸如昵称
-  store.commit('updateUserInfo', friends)
+  this.$store.commit('updateUserInfo', friends)
 }
 
 // 更新好友资料，添加好友成功
@@ -36,17 +36,17 @@ export function onUpdateFriend(error, friends) {
   })
 
   // 补充好友资料
-  store.dispatch('searchUsers', {
+  this.$store.dispatch('searchUsers', {
     accounts: friends.map(item => {
       return item.account
     }),
     done: (users) => {
-      const nim = store.state.nim
+      const nim = this.$store.state.nim
       friends = nim.mergeFriends(friends, users).map(formatUserInfo)
       // 更新好友列表
-      store.commit('updateFriends', friends)
+      this.$store.commit('updateFriends', friends)
       // 更新好友资料
-      store.commit('updateUserInfo', friends)
+      this.$store.commit('updateUserInfo', friends)
     }
   })
 }
@@ -65,9 +65,9 @@ export function onDeleteFriend(error, friends) {
     return item
   })
   // 更新好友列表
-  store.commit('updateFriends', [], friends)
+  this.$store.commit('updateFriends', [], friends)
   // 更新好友资料
-  store.commit('updateUserInfo', friends)
+  this.$store.commit('updateUserInfo', friends)
 }
 
 export function onSyncFriendAction(obj) {

@@ -2,7 +2,7 @@
  * 会话列表
  */
 
-import store from '../'
+// import store from '../'
 
 // 如果会话对象不是好友，需要更新好友名片
 function updateSessionAccount (sessions) {
@@ -10,13 +10,13 @@ function updateSessionAccount (sessions) {
   sessions.forEach(item => {
     if (item.scene === 'p2p') {
       // 如果不存在缓存资料
-      if (!store.state.userInfos[item.to]) {
+      if (!this.$store.state.userInfos[item.to]) {
         accountsNeedSearch.push(item.to)
       }
     }
   })
   if (accountsNeedSearch.length > 0) {
-    store.dispatch('searchUsers', {
+    this.$store.dispatch('searchUsers', {
       accounts: accountsNeedSearch
     })
   }
@@ -25,13 +25,13 @@ function updateSessionAccount (sessions) {
 // onSessions只在初始化完成后回调
 export function onSessions (sessions) {
   updateSessionAccount(sessions)
-  store.commit('updateSessions', sessions)
+  this.$store.commit('updateSessions', sessions)
 }
 
 export function onUpdateSession (session) {
   let sessions = [session]
   updateSessionAccount(sessions)
-  store.commit('updateSessions', sessions)
+  this.$store.commit('updateSessions', sessions)
 }
 
 export function deleteSession ({state, commit}, sessionId) {

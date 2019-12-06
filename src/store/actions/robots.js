@@ -1,5 +1,5 @@
-import store from '../'
+// import store from '../'
 
 export function onRobots (robots) {
-  store.commit('updateRobots', robots)
+  this.store.commit('updateRobots', robots)
 }

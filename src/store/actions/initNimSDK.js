@@ -5,7 +5,7 @@
 import config from '@/configs'
 import pageUtil from '@/utils/page'
 import util from '@/utils'
-import store from '../'
+// import store from '../'
 import {onFriends, onSyncFriendAction} from './friends'
 import {onRobots} from './robots'
 import {onBlacklist, onMarkInBlacklist} from './blacks'
@@ -26,14 +26,6 @@ export function initNimSDK ({ state, commit, dispatch }, loginInfo) {
   }
   dispatch('showLoading')
   // 初始化SDK
-  debugger
-  console.log(
-    "测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试"
-  );
-
-  console.log(loginInfo.uid);
-  console.log(config.appkey);
-  console.log(loginInfo.sdktoken)
   window.nim = state.nim = SDK.NIM.getInstance({
     debug: true,
     appKey: config.appkey,
@@ -56,7 +48,7 @@ export function initNimSDK ({ state, commit, dispatch }, loginInfo) {
     },
     onerror: function onError (event) {
       // alert(JSON.stringify(event))
-      debugger
+      
       alert('网络连接状态异常')
       location.href = config.loginUrl
     },
@@ -137,8 +129,8 @@ export function initNimSDK ({ state, commit, dispatch }, loginInfo) {
     onsyncdone: function onSyncDone () {
       dispatch('hideLoading')
       // 说明在聊天列表页
-      if (store.state.currSessionId) {
-        dispatch('setCurrSession', store.state.currSessionId)
+      if (this.$store.state.currSessionId) {
+        dispatch('setCurrSession', this.$store.state.currSessionId)
       }
     }
   })

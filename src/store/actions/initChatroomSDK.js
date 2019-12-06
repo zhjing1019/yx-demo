@@ -3,9 +3,9 @@
  */
 
 import config from '@/configs'
-import pageUtil from '@/utils/page'
-import util from '@/utils'
-import store from '../'
+// import pageUtil from '@/utils/page'
+// import util from '@/utils'
+// import store from '../'
 import {onChatroomMsgs} from './chatroomMsgs'
 
 const SDK = require('@/sdk/' + config.sdk)

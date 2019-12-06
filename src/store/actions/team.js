@@ -1,4 +1,4 @@
-import store from '../'
+// import store from '../'
 
 // 收到群列表及更新群列表接口
 export function onTeams(teams) {
@@ -14,12 +14,12 @@ export function onTeams(teams) {
       team.avatar = team.avatar + '?imageView&thumbnail=300y300'
     }
   })
-  store.commit('updateTeamList', teams)
+  this.$store.commit('updateTeamList', teams)
 }
 
 // 收到群成员及更新群成员接口
 export function onTeamMembers(obj) {
-  store.commit('updateTeamMembers', obj)
+  this.$store.commit('updateTeamMembers', obj)
 }
 
 export function onCreateTeam(team) {
@@ -36,7 +36,7 @@ export function onSynCreateTeam(team){
 }
 
 export function onDismissTeam(obj) {
-  store.commit('updateTeamList', {
+  this.$store.commit('updateTeamList', {
     invalid: { teamId: obj.teamId }
   })
 }
@@ -47,7 +47,7 @@ export function onUpdateTeam(team) {
 
 export function onTeamNotificationMsg({state, commit}, msg) {
   if (msg.attach.type === 'updateTeam' && msg.attach.team) {
-    store.commit('updateTeamInfo', msg.attach.team)
+    this.$store.commit('updateTeamInfo', msg.attach.team)
   }
   if (msg.attach.type === 'transferTeam') {
     onTeamMembers({
@@ -60,7 +60,7 @@ export function onTeamNotificationMsg({state, commit}, msg) {
 export function onAddTeamMembers(obj) {
   obj.accounts.forEach(account=>{
     // 自己被拉入群时更新群列表
-    if (account === store.state.userUID) {
+    if (account === this.$store.state.userUID) {
       let team = [obj.team]
       onTeams(team)
     }
@@ -74,13 +74,13 @@ export function onAddTeamMembers(obj) {
 export function onRemoveTeamMembers(obj) {
   obj.accounts.forEach(account => {
     // 自己被移出群时，更新群列表
-    if (account === store.state.userUID) {
+    if (account === this.$store.state.userUID) {
       obj.team.validToCurrentUser = false
       let team = [obj.team]
       onTeams(team)
     }
   })
-  store.commit('removeTeamMembersByAccounts', {
+  this.$store.commit('removeTeamMembersByAccounts', {
     teamId: obj.team.teamId,
     accounts: obj.accounts
   })
@@ -109,8 +109,8 @@ export function onUpdateTeamManagers(obj) {
 
 export function onTeamMsgReceipt(obj) {
   obj.teamMsgReceipts.forEach(item => {
-    if (item.teamId === store.state.currReceiptQueryTeamId) {
-      store.commit('updateSingleTeamMsgReads', item)
+    if (item.teamId === this.$store.state.currReceiptQueryTeamId) {
+      this.$store.commit('updateSingleTeamMsgReads', item)
     }
   })
   console.log('群消息回执通知' + obj)
@@ -144,7 +144,7 @@ export function getTeamMembers({ state }, teamId) {
   if (!nim) {
     // 防止nim未初始化
     setTimeout(() => {
-      getTeamMembers(store, teamId)
+      getTeamMembers(this.$store, teamId)
     }, 200);
     return 
   }
@@ -158,7 +158,7 @@ export function getTeamMembers({ state }, teamId) {
         })
       } else {
         setTimeout(() => {
-          getTeamMembers(store, teamId)
+          getTeamMembers(this.$store, teamId)
         }, 200);
       }
     }
@@ -179,13 +179,13 @@ export function checkTeamMsgReceipt({state}, msgs) {
       done: (err, obj, content) => {
         console.log('标记群组消息已读' + (!err ? '成功' : '失败'));
         if (!err) {
-          store.commit('updateSentReceipedMap', needToPeceiptList)
+          this.$store.commit('updateSentReceipedMap', needToPeceiptList)
         }
       }
     })
   }
 
-  store.commit('updateReceiptQueryList', {
+  this.$store.commit('updateReceiptQueryList', {
     teamId: teamId,
     msgs: msgs
   })
@@ -214,7 +214,7 @@ export function getTeamMsgReads({ state }, needQuery) {
         console.log('获取群组消息已读' + error)
       }else {
         console.log('获取群组消息已读：', content)
-        store.commit('updateTeamMsgReads', content)
+        this.$store.commit('updateTeamMsgReads', content)
       }
     }
   })

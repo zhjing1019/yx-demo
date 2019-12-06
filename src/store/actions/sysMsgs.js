@@ -1,9 +1,9 @@
-import store from '../'
+// import store from '../'
 import {onUpdateFriend, onDeleteFriend} from './friends'
 import {onRevocateMsg} from './msgs'
 
 export function onSysMsgs (sysMsgs) {
-  store.commit('updateSysMsgs', sysMsgs)
+  this.$store.commit('updateSysMsgs', sysMsgs)
 }
 
 export function onSysMsg (sysMsg) {
@@ -13,7 +13,7 @@ export function onSysMsg (sysMsg) {
       onUpdateFriend(null, {
         account: sysMsg.from
       })
-      store.commit('updateSysMsgs', [sysMsg])
+      this.$store.commit('updateSysMsgs', [sysMsg])
       break
     case 'deleteFriend':
       onDeleteFriend(null, {
@@ -33,14 +33,14 @@ export function onSysMsg (sysMsg) {
     case 'applyTeam':  // 申请入群
     case 'rejectTeamApply':  // 申请入群被拒绝
     case 'rejectTeamInvite': // 拒绝入群邀请
-      store.commit('updateSysMsgs', [sysMsg])
+    this.$store.commit('updateSysMsgs', [sysMsg])
       break
   }
-  store.commit('updateSysMsgState', sysMsg)
+  this.$store.commit('updateSysMsgState', sysMsg)
 }
 
 export function onSysMsgUnread (obj) {
-  store.commit('updateSysMsgUnread', obj)
+  this.$store.commit('updateSysMsgUnread', obj)
 }
 
 export function onCustomSysMsgs (customSysMsgs) {
@@ -63,7 +63,7 @@ export function onCustomSysMsgs (customSysMsgs) {
     return true
   })
   if (customSysMsgs.length > 0) {
-    store.commit('updateCustomSysMsgs', customSysMsgs)
+    this.$store.commit('updateCustomSysMsgs', customSysMsgs)
   }
 }
 
