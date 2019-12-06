@@ -1,8 +1,8 @@
 <template>
     <div>
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-        <el-form-item label="名称" prop="name">
-            <el-input v-model="ruleForm.name"></el-input>
+        <el-form-item label="名称" prop="account">
+            <el-input v-model="ruleForm.account"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="password">
             <el-input v-model="ruleForm.password"></el-input>
@@ -15,15 +15,18 @@
 </template>
 
 <script>
+import md5 from './../utils/md5'
+import cookie from './../utils/cookie'
+// import config from './../configs'
   export default {
     data() {
       return {
         ruleForm: {
-          name: '',
+          account: '',
           password: '',
         },
         rules: {
-          name: [
+          account: [
             { required: true, message: '请输入名称', trigger: 'blur' },
           ],
           password: [
@@ -37,7 +40,12 @@
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            alert('submit!');
+            let sdktoken = md5(this.ruleForm.password)
+            // 服务端帐号均为小写
+            cookie.setCookie('uid', this.ruleForm.account.toLowerCase());
+            cookie.setCookie('sdktoken', sdktoken);
+            // location.href = config.homeUrl
+            this.$router.push('Home');
           } else {
             // console.log('error submit!!');
             return false;
