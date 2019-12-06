@@ -22,7 +22,9 @@ export default {
   },
 
   watch: {
-    
+    sessionlist(val) {
+      console.log(val);
+    }
   },
   components: {
 

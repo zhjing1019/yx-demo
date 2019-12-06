@@ -9,13 +9,7 @@ import axios from 'axios'
 
 Vue.use(axios)
 Vue.use(ElementUI);
-// Vue.config.productionTip = false
 
-// window.onload = function() {
-//   window.viewportUnitsBuggyfill.init({
-//       hacks: window.viewportUnitsBuggyfillHacks
-//   });
-// }
 
 new Vue({
   router,
