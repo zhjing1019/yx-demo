@@ -16,7 +16,6 @@
 
 <script>
 import md5 from './../utils/md5'
-import cookie from './../utils/cookie'
 // import config from './../configs'
   export default {
     data() {
@@ -42,8 +41,8 @@ import cookie from './../utils/cookie'
           if (valid) {
             let sdktoken = md5(this.ruleForm.password)
             // 服务端帐号均为小写
-            cookie.setCookie('uid', this.ruleForm.account.toLowerCase());
-            cookie.setCookie('sdktoken', sdktoken);
+            localStorage.setItem("uid", this.ruleForm.account.toLowerCase());
+            localStorage.setItem("sdktoken", sdktoken);
             this.$router.push('Home');
           } else {
             return false;
