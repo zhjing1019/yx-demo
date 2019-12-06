@@ -1,5 +1,5 @@
 let config = {
-  sdk: 'NIM_Web_SDK_v6.1.0',
+  sdk: 'NIM_Web_SDK_v7.0.3',
   // 用户自定义的登录注册地址
   loginUrl: '/webdemo/h5/login.html',
   registUrl: '/webdemo/h5/regist.html',
